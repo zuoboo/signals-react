@@ -1,47 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState } from 'react'
 
-const LOCAL_STORAGE_KEY = "TODOS";
+export const TodoList = ({ addTodo, toggleTodo, todos }) => {
+  console.log('Rendering TodoList')
 
-export const TodoList = () => {
-  console.log("Rendering TodoList");
+  const [newTodoName, setNewTodoName] = useState('')
 
-  const [todos, setTodos] = useState(() => {
-    const value = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (value === null) return [];
-    return JSON.parse(value);
-  });
+  const handleSubmit = (e) => {
+    e.preventDefault()
 
-  const [newTodoName, setNewTodoName] = useState("");
+    addTodo(newTodoName)
 
-  const addTodo = (e) => {
-    e.preventDefault();
-    setTodos((prevTodos) => {
-      return [
-        ...prevTodos,
-        { id: crypto.randomUUID(), name: newTodoName, complete: false },
-      ];
-    });
-  };
-
-  const toggleTodo = (id, completed) => {
-    setTodos((prevTodos) => {
-      return prevTodos.map((todo) => {
-        if (todo.id === id) {
-          return { ...todo, completed };
-        }
-        return todo;
-      });
-    });
-  };
-
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
-  }, [todos]);
+    setNewTodoName('')
+  }
 
   return (
     <div className="w-full">
       <form
-        onSubmit={addTodo}
+        onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
         <label
@@ -71,7 +46,7 @@ export const TodoList = () => {
         {todos.map((todo) => (
           <li
             key={todo.id}
-            className={`p-2 ${todo.completed ? "line-through" : ""}`}
+            className={`p-2 ${todo.completed ? 'line-through' : ''}`}
           >
             <label className="flex items-center space-x-3">
               <input
@@ -86,5 +61,5 @@ export const TodoList = () => {
         ))}
       </ul>
     </div>
-  );
-};
+  )
+}
