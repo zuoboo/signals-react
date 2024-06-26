@@ -1,22 +1,33 @@
 import { useState } from 'react'
 
-export const TodoList = ({ addTodo, toggleTodo, todos }) => {
+
+export const TodoList = ({ todos }) => {
   console.log('Rendering TodoList')
 
   const [newTodoName, setNewTodoName] = useState('')
 
-  const handleSubmit = (e) => {
+  const addTodo = (e) => {
     e.preventDefault()
-
-    addTodo(newTodoName)
-
+    todos.value = [
+      ...todos.value,
+      { id: crypto.randomUUID(), name: newTodoName, complete: false },
+    ]
     setNewTodoName('')
+  }
+
+  const toggleTodo = (id, completed) => {
+    todos.value = todos.value.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, completed }
+      }
+      return todo
+    })
   }
 
   return (
     <div className="w-full">
       <form
-        onSubmit={handleSubmit}
+        onSubmit={addTodo}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
         <label
@@ -43,7 +54,7 @@ export const TodoList = ({ addTodo, toggleTodo, todos }) => {
         </div>
       </form>
       <ul className="list-inside">
-        {todos.map((todo) => (
+        {todos.value.map((todo) => (
           <li
             key={todo.id}
             className={`p-2 ${todo.completed ? 'line-through' : ''}`}

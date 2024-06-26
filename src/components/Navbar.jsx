@@ -1,5 +1,11 @@
+import { computed } from '@preact/signals-react'
+
 export const Navbar = ({ todos }) => {
   console.log('Rendering Navbar')
+
+  const completedTodosCount = computed(() => {
+    return todos.value.filter((todo) => todo.completed).length
+  })
 
   return (
     <nav className="bg-gray-800 text-white p-4 fixed w-full z-10 top-0">
@@ -11,7 +17,9 @@ export const Navbar = ({ todos }) => {
           >
             Todos
           </a>
-          <span>Done: {todos.filter((todo) => todo.completed).length}</span>
+          <span className="text-red-500 font-bold">
+            Done: {completedTodosCount.value}
+          </span>
         </div>
         <div>
           <a
